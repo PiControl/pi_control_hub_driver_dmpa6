@@ -196,7 +196,7 @@ class DmpA6DeviceDriverDescriptor(DeviceDriverDescriptor):
     def _cached_devices(self) -> List[DeviceInfo]:
         with dbm.open(self._cache_filepath, "c") as cache:
             if "cached_devices" in cache:
-                jsn = cache["cached_devices"]
+                jsn: str = cache["cached_devices"]
                 devices_jsn = json.loads[jsn]
                 devices = list(map(lambda d: DeviceInfo(d["name"], d["device_id"]), devices_jsn))
                 return devices
@@ -206,7 +206,7 @@ class DmpA6DeviceDriverDescriptor(DeviceDriverDescriptor):
     def _cache_devices(self, devices: List[DeviceInfo]):
         with dbm.open(self._cache_filepath, "c") as cache:
             devices_jsn = list(map(lambda d: {"name": d.name, "device_id": d.device_id}, devices))
-            jsn = json.dumps(devices_jsn)
+            jsn: str = json.dumps(devices_jsn)
             cache["cached_devices"] = jsn
 
     async def get_devices(self) -> List[DeviceInfo]:

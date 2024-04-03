@@ -83,6 +83,12 @@ async def _execute_command(ip_address: str, port: int = 9529, uri: str = "") -> 
             response_json = json.loads(response_text)
             return response_json
 
+async def power_off(ip_address: str, port: int = 9529):
+    response = await _execute_command(ip_address, port=port, uri="/ZidooMusicControl/v2/setPowerOption?tag=poweroff")
+    if response["status"] != 200:
+        pass
+        # TODO
+
 async def play_or_pause(ip_address: str, port: int = 9529):
     response = await _execute_command(ip_address, port=port, uri="/ZidooMusicControl/v2/playOrPause")
     if response["status"] != 200:

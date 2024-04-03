@@ -16,12 +16,13 @@
 
 from typing import Any, Awaitable, Callable, List
 
+import lirc
 from pi_control_hub_driver_api import DeviceCommand
 
 from pi_control_hub_driver_dmpa6.eversolo import (change_vu_display,
                                                   decrease_volume,
                                                   increase_volume, next_track,
-                                                  play_or_pause,
+                                                  play_or_pause, power_off,
                                                   previous_track,
                                                   set_input_bluetooth,
                                                   set_input_coax,
@@ -80,6 +81,10 @@ class DmpA6PowerToggleCommand(DeviceCommand):
             device_id: str):
         DeviceCommand.__init__(self, cmd_id=cmd_id, title=title, icon=icon)
         self._ip_address = device_id
+        try:
+            self._lirc_client = lirc.Client()
+        except lirc.exceptions.LircdConnectionError:
+            self._lirc_client = None
 
     async def execute(self):
         """
@@ -89,8 +94,11 @@ class DmpA6PowerToggleCommand(DeviceCommand):
         ------
         `DeviceCommandException` in case of an error while executing the command.
         """
-        # TODO
-        pass
+        if self._lirc_client is None:
+            await power_off(self._ip_address)
+        else:
+            # use lirc to toggle power
+            pass
 
 
 # Command IDs
