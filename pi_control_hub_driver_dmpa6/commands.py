@@ -98,7 +98,7 @@ class DmpA6PowerToggleCommand(DeviceCommand):
             await power_off(self._ip_address)
         else:
             # use lirc to toggle power
-            pass
+            self._lirc_client.send_once("Eversolo_DMP-A6", "KEY_POWER")
 
 
 # Command IDs
