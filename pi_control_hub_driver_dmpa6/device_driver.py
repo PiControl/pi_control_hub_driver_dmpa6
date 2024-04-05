@@ -191,13 +191,12 @@ class DmpA6DeviceDriverDescriptor(DeviceDriverDescriptor):
         )
         self._zeroconf_browser = ZeroconfBrowser()
         self._cache_filepath = os.path.join(DeviceDriverDescriptor.get_config_path(), "eversolo.cache")
-        self._filecache = dbm.open(self._cache_filepath, "c")
 
     def _cached_devices(self) -> List[DeviceInfo]:
         with dbm.open(self._cache_filepath, "c") as cache:
             if "cached_devices" in cache:
                 jsn: str = cache["cached_devices"]
-                devices_jsn = json.loads[jsn]
+                devices_jsn = json.loads(jsn)
                 devices = list(map(lambda d: DeviceInfo(d["name"], d["device_id"]), devices_jsn))
                 return devices
 
