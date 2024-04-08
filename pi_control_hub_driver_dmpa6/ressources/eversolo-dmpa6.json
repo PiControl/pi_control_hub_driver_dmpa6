@@ -1,0 +1,24 @@
+{
+  "format": {
+    "preamble": [
+      25,
+      12,
+      2
+    ],
+    "coding": "ppm",
+    "zero": [
+      1,
+      2
+    ],
+    "one": [
+      4,
+      2
+    ],
+    "timebase": 370,
+    "gap": 46000,
+    "carrier": 38000
+  },
+  "keys": {
+    "KEY_POWER": "80 81 4D B2"
+  }
+}

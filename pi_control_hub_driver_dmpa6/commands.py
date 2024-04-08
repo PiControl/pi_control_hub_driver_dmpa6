@@ -16,8 +16,8 @@
 
 from typing import Any, Awaitable, Callable, List
 
-import lirc
-from pi_control_hub_driver_api import DeviceCommand
+import piir
+from pi_control_hub_driver_api import DeviceCommand, DeviceDriverDescriptor
 
 from pi_control_hub_driver_dmpa6.eversolo import (change_vu_display,
                                                   decrease_volume,
@@ -45,6 +45,7 @@ from pi_control_hub_driver_dmpa6.icons import (in_bluetooth, in_coax,
                                                play_previous, toggle_display,
                                                toggle_power, toggle_vu,
                                                volume_down, volume_up)
+from pi_control_hub_driver_dmpa6.ressources import get_piirc_config
 
 CallbackType = Callable[[str], Awaitable[Any]]
 
@@ -81,10 +82,6 @@ class DmpA6PowerToggleCommand(DeviceCommand):
             device_id: str):
         DeviceCommand.__init__(self, cmd_id=cmd_id, title=title, icon=icon)
         self._ip_address = device_id
-        try:
-            self._lirc_client = lirc.Client()
-        except lirc.exceptions.LircdConnectionError:
-            self._lirc_client = None
 
     async def execute(self):
         """
@@ -94,11 +91,11 @@ class DmpA6PowerToggleCommand(DeviceCommand):
         ------
         `DeviceCommandException` in case of an error while executing the command.
         """
-        if self._lirc_client is None:
-            await power_off(self._ip_address)
+        if DeviceDriverDescriptor.get_ir_gpio_out() is not None:
+            remote = piir.Remote(get_piirc_config(), DeviceDriverDescriptor.get_ir_gpio_out())
+            remote.send("KEY_POWER")
         else:
-            # use lirc to toggle power
-            self._lirc_client.send_once("Eversolo_DMP-A6", "KEY_POWER")
+            await power_off(self._ip_address)
 
 
 # Command IDs

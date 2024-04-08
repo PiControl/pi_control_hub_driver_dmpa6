@@ -28,12 +28,13 @@ setup(
     license='Apache 2.0',
     packages=find_packages(),
     package_data={
-        "pi_control_hub_driver_dmpa6.icons": ["*.png"]
+        "pi_control_hub_driver_dmpa6.icons": ["*.png"],
+        "pi_control_hub_driver_dmpa6.ressources": ["*.json"],
     },
     install_requires=[
         'pi_control_hub_driver_api @ git+https://github.com/PiControl/pi_control_hub_driver_api.git@main#egg=pi_control_hub_driver_api',
         'zeroconf>=0.131.0',
-        'lirc>=2.0.2'
+        'PiIR>=0.2.5'
     ],
     entry_points={
         "pi_control_hub_driver": [
